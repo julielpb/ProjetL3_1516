@@ -6,8 +6,8 @@ import java.util.logging.Level;
 
 import serveur.Arene;
 import serveur.element.Caracteristique;
-import serveur.element.Monstre;
 import serveur.element.Personnage;
+import serveur.element.Vampire;
 import serveur.vuelement.VuePersonnage;
 import utilitaires.Calculs;
 import utilitaires.Constantes;
@@ -32,20 +32,8 @@ public class Duel extends Interaction<VuePersonnage> {
 	public void interagit() {
 		try {
 			Personnage pAttaquant = attaquant.getElement();
-			Personnage pDefenseur = defenseur.getElement();
 			int forceAttaquant = pAttaquant.getCaract(Caracteristique.FORCE);
-			int defDefenseur = pDefenseur.getCaract(Caracteristique.DEFENSE);
-			
-			/**
-			 * calcul des degats avec reduction
-			 */
-			double tauxDegatRecu = 1.0-(defDefenseur/100.0);
-			int perteVie = (int) (forceAttaquant*tauxDegatRecu);
-			
-			/**
-			 * Perte de defense
-			 */
-			arene.incrementeCaractElement(defenseur, Caracteristique.DEFENSE, -10);
+			int perteVie = forceAttaquant;
 		
 			Point positionEjection = positionEjection(defenseur.getPosition(), attaquant.getPosition(), forceAttaquant);
 
@@ -55,21 +43,12 @@ public class Duel extends Interaction<VuePersonnage> {
 			// degats
 			if (perteVie > 0) {
 				arene.incrementeCaractElement(defenseur, Caracteristique.VIE, -perteVie);
-				
+				if (attaquant.getElement() instanceof Vampire){
+					System.out.println("coucou");
+					arene.incrementeCaractElement(attaquant, Caracteristique.VIE, perteVie/2);
+				}
 				logs(Level.INFO, Constantes.nomRaccourciClient(attaquant) + " colle une beigne ("
 						+ perteVie + " points de degats) a " + Constantes.nomRaccourciClient(defenseur));
-				Personnage at = attaquant.getElement();
-				at.setDegatTotal(at.getDegatTotal()+perteVie);
-			}
-			
-			/**
-			 * Regain de vie si l'on tue le defenseur
-			 */
-			if (pDefenseur.getCaract(Caracteristique.VIE) <= 0 && !(pDefenseur instanceof Monstre) && !(pAttaquant instanceof Monstre)){
-				arene.incrementeCaractElement(attaquant, Caracteristique.VIE, 10);
-			}
-			if (pDefenseur.getCaract(Caracteristique.VIE) <= 0 && (pDefenseur instanceof Monstre) && !(pAttaquant instanceof Monstre)){
-				arene.incrementeCaractElement(attaquant, Caracteristique.FORCE, 10);
 			}
 			
 			// initiative

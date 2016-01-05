@@ -8,7 +8,6 @@ import javax.swing.table.AbstractTableModel;
 
 import serveur.element.Caracteristique;
 import serveur.vuelement.VueElement;
-import serveur.vuelement.VuePersonnage;
 
 /**
  * Classe abstraite de Table Model affichant une liste de vueElement.
@@ -76,17 +75,6 @@ public abstract class ElementTableModel<V extends VueElement<?>> extends Abstrac
 		@Override
 		public Object valeurColonne(int rowIndex, V vue) {
 			return vue.getElement().getGroupe();
-		}
-	}
-	
-	/**
-	 * Affiche le degat total d'un personnage.
-	 *
-	 */
-	protected class ValeurColonneDegat implements IValeurColonne<V> {
-		@Override
-		public Object valeurColonne(int rowIndex, V vue) {
-			return ((VuePersonnage)vue).getElement().getDegatTotal();
 		}
 	}
 

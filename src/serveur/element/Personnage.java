@@ -14,8 +14,6 @@ import utilitaires.Calculs;
  */
 public class Personnage extends Element {
 	
-	private int degatTotal;
-	
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -26,17 +24,8 @@ public class Personnage extends Element {
 	 */
 	public Personnage(String nom, String groupe, HashMap<Caracteristique, Integer> caracts) {
 		super(nom, groupe, caracts);
-		this.degatTotal = 0;
 	}
 	
-	public int getDegatTotal() {
-		return degatTotal;
-	}
-
-	public void setDegatTotal(int degatTotal) {
-		this.degatTotal = degatTotal;
-	}
-
 	/**
 	 * Incremente la caracteristique donnee de la valeur donnee.
 	 * Si la caracteristique n'existe pas, elle sera cree avec la valeur 
