@@ -716,6 +716,7 @@ public class Arene extends UnicastRemoteObject implements IAreneIHM, Runnable {
 				new Ramassage(this, vuePersonnage, vuePotion).interagit();
 				personnages.get(refRMI).executeAction();
 				
+				
 				res = true;
 			} else {
 				logger.warning(Constantes.nomClasse(this), nomRaccourciClient(refRMI) + 
@@ -985,6 +986,7 @@ public class Arene extends UnicastRemoteObject implements IAreneIHM, Runnable {
 
 	@Override
 	public void lancePotion(Potion potion, Point position, String motDePasse) throws RemoteException {}
+
 
 	
 }

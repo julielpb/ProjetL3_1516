@@ -7,6 +7,7 @@ import java.util.logging.Level;
 import serveur.Arene;
 import serveur.element.Caracteristique;
 import serveur.element.Personnage;
+import serveur.element.Vampire;
 import serveur.vuelement.VuePersonnage;
 import utilitaires.Calculs;
 import utilitaires.Constantes;
@@ -42,7 +43,10 @@ public class Duel extends Interaction<VuePersonnage> {
 			// degats
 			if (perteVie > 0) {
 				arene.incrementeCaractElement(defenseur, Caracteristique.VIE, -perteVie);
-				
+				if (attaquant.getElement() instanceof Vampire){
+					System.out.println("coucou");
+					arene.incrementeCaractElement(attaquant, Caracteristique.VIE, perteVie/2);
+				}
 				logs(Level.INFO, Constantes.nomRaccourciClient(attaquant) + " colle une beigne ("
 						+ perteVie + " points de degats) a " + Constantes.nomRaccourciClient(defenseur));
 			}

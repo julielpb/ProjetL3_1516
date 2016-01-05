@@ -8,6 +8,7 @@ import java.util.HashMap;
 import client.StrategiePersonnage;
 import logger.LoggerProjet;
 import serveur.element.Caracteristique;
+import serveur.element.Personnage;
 import utilitaires.Calculs;
 import utilitaires.Constantes;
 
@@ -23,7 +24,7 @@ public class LancePersonnage {
 		String nom = "Truc";
 		
 		// TODO remplacer la ligne suivante par votre numero de groupe
-		String groupe = "G" + Calculs.nombreAleatoire(0,99); 
+		String groupe = "G8";
 		
 		// nombre de tours pour ce personnage avant d'etre deconnecte 
 		// (30 minutes par defaut)
@@ -77,7 +78,7 @@ public class LancePersonnage {
 			
 			Point position = Calculs.positionAleatoireArene();
 			
-			new StrategiePersonnage(ipArene, port, ipConsole, nom, groupe, caracts, nbTours, position, logger);
+			new StrategiePersonnage(ipArene, port, ipConsole, new Personnage(nom,groupe,caracts), nbTours, position, logger);
 			logger.info("Lanceur", "Creation du personnage reussie");
 			
 		} catch (Exception e) {

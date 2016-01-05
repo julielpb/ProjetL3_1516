@@ -8,7 +8,6 @@ import java.util.HashMap;
 import client.controle.Console;
 import logger.LoggerProjet;
 import serveur.IArene;
-import serveur.element.Caracteristique;
 import serveur.element.Element;
 import serveur.element.Personnage;
 import serveur.element.Potion;
@@ -38,15 +37,13 @@ public class StrategiePersonnage {
 	 * @param logger gestionnaire de log
 	 */
 	public StrategiePersonnage(String ipArene, int port, String ipConsole, 
-			String nom, String groupe, HashMap<Caracteristique, Integer> caracts,
+			Personnage perso,
 			int nbTours, Point position, LoggerProjet logger) {
 		
 		logger.info("Lanceur", "Creation de la console...");
 		
 		try {
-			console = new Console(ipArene, port, ipConsole, this, 
-					new Personnage(nom, groupe, caracts), 
-					nbTours, position, logger);
+			console = new Console(ipArene, port, ipConsole, this, perso, nbTours, position, logger);
 			logger.info("Lanceur", "Creation de la console reussie");
 			
 		} catch (Exception e) {
@@ -90,7 +87,6 @@ public class StrategiePersonnage {
 			int distPlusProche = Calculs.distanceChebyshev(position, arene.getPosition(refCible));
 
 			Element elemPlusProche = arene.elementFromRef(refCible);
-
 			if(distPlusProche <= Constantes.DISTANCE_MIN_INTERACTION) { // si suffisamment proches
 				// j'interagis directement
 				if(elemPlusProche instanceof Potion) { // potion

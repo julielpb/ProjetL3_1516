@@ -4,8 +4,10 @@ import java.awt.Point;
 import java.rmi.RemoteException;
 import java.util.HashMap;
 
+import serveur.element.Caracteristique;
 import serveur.vuelement.VuePersonnage;
 import utilitaires.Calculs;
+import utilitaires.Constantes;
 
 /**
  * Represente le deplacement d'un personnage.
@@ -47,6 +49,8 @@ public class Deplacement {
 	 * @param refObjectif reference de l'element cible
 	 */    
 	public void seDirigeVers(int refObjectif) throws RemoteException {
+		int vit = personnage.getElement().getCaract(Caracteristique.VITESSE);
+		Point pos = personnage.getPosition();
 		Point pvers;
 
 		// on ne bouge que si la reference n'est pas la notre
@@ -65,7 +69,12 @@ public class Deplacement {
 	
 			// on ne bouge que si l'element existe
 			if(pvers != null) {
-				seDirigeVers(pvers);
+				for (int i=0; i<vit ; i++)
+					if(Calculs.distanceChebyshev(pos, pvers) > Constantes.DISTANCE_MIN_INTERACTION)
+						seDirigeVers(pvers);
+					else if (refObjectif <= 0)
+						seDirigeVers(pvers);
+				
 			}
 		}
 	}

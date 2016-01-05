@@ -2,7 +2,10 @@ package serveur.vuelement;
 
 import java.awt.Color;
 import java.awt.Point;
+import java.util.HashMap;
+import java.util.Map;
 
+import serveur.element.Caracteristique;
 import serveur.element.Personnage;
 import utilitaires.Constantes;
 
@@ -40,6 +43,8 @@ public class VuePersonnage extends VueElement<Personnage> implements Comparable<
 	 */
 	private int tourMort = -1;
 	
+	private HashMap<Map <Caracteristique, Integer>, Integer> potionCD;
+
 	/**
 	 * Cree une vue du personnage.
 	 * @param adresseIp adresse IP de la console correspondant au personnage
@@ -56,6 +61,7 @@ public class VuePersonnage extends VueElement<Personnage> implements Comparable<
 		this.adresseIp = adresseIp;
 		this.actionExecutee = false;
 		this.NB_TOURS = nbTours;
+		this.potionCD = new HashMap <Map <Caracteristique, Integer>, Integer>();
 	}
 	
 	/**
@@ -65,11 +71,25 @@ public class VuePersonnage extends VueElement<Personnage> implements Comparable<
 		actionExecutee = true;
 	}
 
+	public HashMap<Map<Caracteristique, Integer>, Integer> getPotionCD() {
+		return potionCD;
+	}
+
 	/**
 	 * Termine le tour de ce personnage : decremente le nombre de tours restants
 	 * et note qu'aucune action n'a ete executee. 
 	 */
 	public void termineTour() {
+		System.out.println(this.potionCD);
+		for(Map <Caracteristique, Integer> potion: this.potionCD.keySet()){
+			System.out.println(potion + " "+potion.hashCode());
+			this.potionCD.put(potion, this.potionCD.get(potion)-1);
+			if(this.potionCD.get(potion) == 0){
+				for(Caracteristique c: potion.keySet())
+					this.getElement().incrementeCaract(c, -potion.get(c));
+				this.potionCD.remove(potion);
+			}
+		}
 		actionExecutee = false;
 		tour++;
 	}
@@ -134,6 +154,11 @@ public class VuePersonnage extends VueElement<Personnage> implements Comparable<
 		
 		
 		return res;
+	}
+
+	public void ajoutePotionTemporaire(HashMap<Caracteristique, Integer> valeursPotion) {
+		this.potionCD.put(valeursPotion,10);
+		
 	}
 }
 

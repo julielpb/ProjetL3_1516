@@ -2,10 +2,12 @@ package serveur.interaction;
 
 import java.rmi.RemoteException;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 
 import serveur.Arene;
 import serveur.element.Caracteristique;
+import serveur.element.PotionTemporaire;
 import serveur.vuelement.VuePersonnage;
 import serveur.vuelement.VuePotion;
 import utilitaires.Constantes;
@@ -38,8 +40,32 @@ public class Ramassage extends Interaction<VuePotion> {
 				// caracteristiques de la potion
 				HashMap<Caracteristique, Integer> valeursPotion = defenseur.getElement().getCaracts();
 				
+				if(defenseur.getElement() instanceof PotionTemporaire){
+					if (!(attaquant.getElement().getCaracts().isEmpty())){
+						for(Map <Caracteristique, Integer> potion: attaquant.getPotionCD().keySet()){
+							for(Caracteristique c: potion.keySet())
+								attaquant.getElement().incrementeCaract(c, -potion.get(c));
+							attaquant.getPotionCD().remove(potion);
+						}
+					}
+					if ((Caracteristique.VIE.getMax()-attaquant.getElement().getCaract(Caracteristique.VIE))<valeursPotion.get(Caracteristique.VIE)){
+						valeursPotion.put(Caracteristique.VIE, Caracteristique.VIE.getMax()-attaquant.getElement().getCaract(Caracteristique.VIE));
+					}
+					if ((Caracteristique.FORCE.getMax()-attaquant.getElement().getCaract(Caracteristique.FORCE))<valeursPotion.get(Caracteristique.FORCE)){
+						valeursPotion.put(Caracteristique.FORCE, Caracteristique.FORCE.getMax()-attaquant.getElement().getCaract(Caracteristique.FORCE));
+					}
+					if ((Caracteristique.INITIATIVE.getMax()-attaquant.getElement().getCaract(Caracteristique.INITIATIVE))<valeursPotion.get(Caracteristique.INITIATIVE)){
+						valeursPotion.put(Caracteristique.INITIATIVE, Caracteristique.INITIATIVE.getMax()-attaquant.getElement().getCaract(Caracteristique.INITIATIVE));
+					}
+					if ((Caracteristique.VITESSE.getMax()-attaquant.getElement().getCaract(Caracteristique.VITESSE))<valeursPotion.get(Caracteristique.VITESSE)){
+						valeursPotion.put(Caracteristique.VITESSE, Caracteristique.VITESSE.getMax()-attaquant.getElement().getCaract(Caracteristique.VITESSE));
+					}
+					attaquant.ajoutePotionTemporaire(valeursPotion);
+				}
+				
 				for(Caracteristique c : valeursPotion.keySet()) {
 					arene.incrementeCaractElement(attaquant, c, valeursPotion.get(c));
+					
 				}
 				
 				logs(Level.INFO, "Potion bue !");
