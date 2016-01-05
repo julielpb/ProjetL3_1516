@@ -1069,7 +1069,7 @@ public class Arene extends UnicastRemoteObject implements IAreneIHM, Runnable {
 			return res;
 		}
 
-	}
+	} 
 
 	@Override
 	public String nomFromRef(int refRMI) throws RemoteException {
